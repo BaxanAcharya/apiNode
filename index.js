@@ -42,10 +42,10 @@ var userController=require('./controllers/User_Controller.js');
 var app1=test()
 
 
-app1.use(bodyParser.urlencoded({extended:true}))
+
 
 app1.post('/hotel',function(req,res,next){
-	console.log(req.body);
+console.log(req.body);
 	res.status(201);
 });
 
@@ -73,9 +73,18 @@ app1.get('/hotel/:id/', function (req,res,next) {
 }
 
 
+app1.use(bodyParser.urlencoded({extended:true}))
+app1.post('/registration', userController.validation,userController.registerUser)
+
+
 app1.use('/*',function (req,res) {
 	res.status(404);
 	res.send('NOT FOUND');
+})
+
+app1.use(function(err,req,res,next)
+{
+  next(err)
 })
 
 app1.listen(3000);
