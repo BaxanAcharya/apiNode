@@ -57,7 +57,8 @@ function registerUser (req,res,next){
 console.log(req.body);
 user.create({
 username:req.body.username,
-password:req.userHash
+password:req.userHash,
+address:req.body.address
 
 })
 .then(function(result){
@@ -75,13 +76,68 @@ next(err);
 
 }
 
-function jwtTokenGen(){
+
+function deleteUser(req,res,next){
+
+  if(req.params.id===null || undefined){
+    res.json({
+      status:500,
+      message: 'Id needed'
+    })
+  }
+
+user.destroy({
+  where: {
+    id:req.params.id
+  }
+})
+.then(function(result){
+  if(result === 0 ){
+    res.json({status:404,message:'user not found'})
+  }
+  else{
+
+  }
+  console.log(result);
+  res.json(result)
+
+})
+.catch(function(err){
+next(err);
+})
+
 
 }
 
 
+function updateUser(req,res,next){
+  user.update({
+    username:req.body.username
+  },{
+    where:{
+      id:req.params.id
+    }
+  })
+  .then(function(result){
+    if(result===0)
+    {
+      res.json({
+        status:404,
+        message:'User not found and not updated'
+      })
+    }else{
+      res.json(result + "updated")
+    }
+  }). catch(function(err)
+  {
+    next(err);
+  })
+}
+
 module.exports = {
   registerUser,
   validation,
-  hashGen
+  hashGen,
+  deleteUser,
+  updateUser
 }

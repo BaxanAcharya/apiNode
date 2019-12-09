@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var userController = require('./controllers/User_Controller.js')
 
 var AuthController = require('./controllers/AuthController.js')
-console.log(userController);
+
 
 
 
@@ -64,7 +64,10 @@ app1.post('/registration',userController.validation,userController.hashGen,userC
 
 app1.post('/login',AuthController.validtor,AuthController.passwordCheck, AuthController.jwtTokenGen)
 
-// app1.get('/userlist', AuthController.verifyToken)
+app1.get('/userlist', AuthController.verifyToken);
+
+app1.delete('/users/:id',AuthController.verifyToken,userController.deleteUser)
+app1.put('/users/:id',AuthController.verifyToken, userController.updateUser)
 
 
 
