@@ -5,7 +5,7 @@ var bcrypt = require('bcrypt');
 
 function hashGen(req,res,next){
 saltRounds = 10; 
-console.log('in has gen');
+//console.log('in has gen');
 bcrypt.hash(req.body.password,saltRounds)
 .then(function(hash){
   console.log(hash);
@@ -28,33 +28,41 @@ user.findOne({
 .then(function(result){
 // console.log(result);
 if(result === null){
-
 // res.send('user not found so registeed')
-next();
-
+next()
 }
-
 else{
-
-console.log('user was already registered');
+// console.log('user was already registered');
 res.send('You are already registered')
 
 }
-
-
 })
 .catch(function(err){
-
 next(err)
-
 })
+}
 
+
+function selectAll(req,res)
+{
+user.findAll()
+.then(function(result)
+{
+  if(result=== null)
+  {
+    res.send("No data found")
+    
+  }else{
+    res.json(result)
+  }
+}).catch(function(err)
+{
+  next(err)
+})
 }
 
 
 function registerUser (req,res,next){
-
-console.log(req.body);
 user.create({
 username:req.body.username,
 password:req.userHash,
@@ -70,12 +78,30 @@ res.json({
 })
 })
 .catch(function(err){
-console.log(err)
+//console.log(err)
 next(err);
 })
 
 }
 
+
+function selectOne(req,res,next)
+{
+  user.findOne({
+  where:{id:req.params.id}
+}).then(function(result)
+{
+  if(result === null)
+  {
+    res.json("User not found at " + req.params.id)
+  }else{
+    res.json(result)
+  }
+}).catch(function(err)
+{
+  next(err)
+})
+}
 
 function deleteUser(req,res,next){
 
@@ -98,7 +124,7 @@ user.destroy({
   else{
 
   }
-  console.log(result);
+  //console.log(result);
   res.json(result)
 
 })
@@ -112,7 +138,8 @@ next(err);
 
 function updateUser(req,res,next){
   user.update({
-    username:req.body.username
+    username:req.body.username,
+    address:req.body.address
   },{
     where:{
       id:req.params.id
@@ -139,5 +166,7 @@ module.exports = {
   validation,
   hashGen,
   deleteUser,
-  updateUser
+  updateUser,
+  selectAll,
+  selectOne
 }

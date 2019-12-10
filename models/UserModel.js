@@ -32,7 +32,7 @@ password:{
 
 user.sync({force:false})
 .then(() => {
-    console.log('User table has been created');
+   // console.log('User table has been created');
   })
   .catch(err => {
     console.error(err);

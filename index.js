@@ -64,8 +64,8 @@ app1.post('/registration',userController.validation,userController.hashGen,userC
 
 app1.post('/login',AuthController.validtor,AuthController.passwordCheck, AuthController.jwtTokenGen)
 
-app1.get('/userlist', AuthController.verifyToken);
-
+app1.get('/userlist', AuthController.verifyToken, userController.selectAll);
+app1.get('/userselect/:id', AuthController.verifyToken, userController.selectOne);
 app1.delete('/users/:id',AuthController.verifyToken,userController.deleteUser)
 app1.put('/users/:id',AuthController.verifyToken, userController.updateUser)
 
