@@ -14,6 +14,14 @@ var swaggerDefinition={
 		description:'This is description part'
 	},
 	//this is optional
+	securityDefinitions:{
+		bearerAuth:{
+			type:'apiKey' ,
+			name:'authorization' ,
+			scheme:'bearer' ,
+			in:'header'
+		}
+	},
 	host:'localhost:3000',
 	basePath:'/'
 }
@@ -73,12 +81,13 @@ app1.use(bodyParser.urlencoded({extended:true}))
 app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
 
 /**
+/**
  *  @swagger
  *  /registration:
  *   post:
  *    tags:
  *     - user
- *    description: Testing registration
+ *    description: Testing
  *    produces:
  *     - application/json
  *    consumes:
@@ -98,7 +107,12 @@ app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
  *       in:  formData
  *       type: string
  *       required: true
- *       description: This is address to be entered  
+ *       description: This is address to be entered
+ *    responses:
+ *     201:
+ *      description: Successfully registered
+ *	   500:
+ *      description:fgfsg
  */
 app1.post('/registration',userController.validation,userController.hashGen,userController.registerUser )
 
@@ -123,12 +137,40 @@ app1.post('/registration',userController.validation,userController.hashGen,userC
  *       in:  formData
  *       type: string
  *       required: true
- *       description: This is password to be entered 
+ *       description: This is password to be entered
+ *    responses:
+ *     200:
+ *      description: succussfully logged in
+ *	   500:
+ *      description:fgfsg   
  */
 app1.post('/login',AuthController.validtor,AuthController.passwordCheck, AuthController.jwtTokenGen)
 
 app1.get('/userlist', AuthController.verifyToken, userController.selectAll);
 app1.get('/userselect/:id', AuthController.verifyToken, userController.selectOne);
+
+/**
+ *  @swagger
+ *  /users/{id}:
+ *   delete:
+ *    tags:
+ *     - DeleteUsers
+ *    security:
+ *     - bearerAuth: [] 
+ *    description: Testing delete
+ *    produces:
+ *     - application/json
+ *    parameters:
+ *     - name: id
+ *       in:  path
+ *    responses:
+ *     200:
+ *      description: successfully deleted
+ *     404:
+ *      description: user not found
+ *	   500:
+ *      description:Internal server error
+ */
 app1.delete('/users/:id',AuthController.verifyToken,userController.deleteUser)
 app1.put('/users/:id',AuthController.verifyToken, userController.updateUser)
 

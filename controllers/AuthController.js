@@ -69,7 +69,7 @@ jwt.sign(payloadd, 'thisisSecretKey'
 
 function verifyToken(req,res,next){
 	
-	if(req.headers.authorization === null){
+	if(req.headers.authorization === undefined){
 		res.json({status:401,message:"Unauthorized"})
 			}
 
@@ -84,9 +84,6 @@ function verifyToken(req,res,next){
 		else{
 			next(err);
 		}
-
-
-	
 	})
 
 }

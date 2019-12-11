@@ -126,7 +126,8 @@ user.destroy({
 
   }
   //console.log(result);
-  res.json(result)
+  res.status(200)
+  res.json({status:200, message:'successfully deleted'})
 
 })
 .catch(function(err){
