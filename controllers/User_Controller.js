@@ -33,7 +33,7 @@ next()
 }
 else{
 // console.log('user was already registered');
-res.send('You are already registered')
+res.json({status:409, message:'You are already registered'})
 
 }
 })
@@ -72,9 +72,10 @@ address:req.body.address
 .then(function(result){
 
 // console.log(result);
+res.status(201)
 res.json({
   satus:201,
-  message:"You have regisr"
+  message:"You have regitered"
 })
 })
 .catch(function(err){

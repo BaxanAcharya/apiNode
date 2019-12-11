@@ -3,16 +3,35 @@ const test = require('express');
 // console.log(test);
 var bodyParser = require('body-parser');
 // var userModel = require('./models/UserModel.js')
+
+var swaggerJSDoc= require('swagger-jsdoc') //actual documentation
+var swaggerUI=require('swagger-ui-express') //for viewing the documentation
+
+var swaggerDefinition={
+	info:{
+		title:'NodeJs',
+		version:'0.0.1',
+		description:'This is description part'
+	},
+	//this is optional
+	host:'localhost:3000',
+	basePath:'/'
+}
+
+
+var swaggerOptions={
+	swaggerDefinition,
+	apis:['./index.js']
+}
+
+var swaggerSepcs=swaggerJSDoc(swaggerOptions)
+
+
+
+
 var userController = require('./controllers/User_Controller.js')
 
 var AuthController = require('./controllers/AuthController.js')
-
-
-
-
-
-
-
 
 // console.log(db.sequelize);
 
@@ -33,13 +52,6 @@ var AuthController = require('./controllers/AuthController.js')
 
 // },3000)
 
-
-
-
-
-
-
-
 // })
 
 // console.log(promiseVal);
@@ -58,10 +70,61 @@ var AuthController = require('./controllers/AuthController.js')
 var app1 = test()
 
 app1.use(bodyParser.urlencoded({extended:true}))
+app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
 
-
+/**
+ *  @swagger
+ *  /registration:
+ *   post:
+ *    tags:
+ *     - user
+ *    description: Testing registration
+ *    produces:
+ *     - application/json
+ *    consumes:
+ *     - application/x-www-form-urlencoded
+ *    parameters:
+ *     - name: username
+ *       in:  formData
+ *       type: string
+ *       required: true
+ *       description: This is username to be entered
+ *     - name: password
+ *       in:  formData
+ *       type: string
+ *       required: true
+ *       description: This is password to be entered
+ *     - name: address
+ *       in:  formData
+ *       type: string
+ *       required: true
+ *       description: This is address to be entered  
+ */
 app1.post('/registration',userController.validation,userController.hashGen,userController.registerUser )
 
+/**
+ *  @swagger
+ *  /login:
+ *   post:
+ *    tags:
+ *     - login
+ *    description: Testing login
+ *    produces:
+ *     - application/json
+ *    consumes:
+ *     - application/x-www-form-urlencoded
+ *    parameters:
+ *     - name: username
+ *       in:  formData
+ *       type: string
+ *       required: true
+ *       description: This is username to be entered
+ *     - name: password
+ *       in:  formData
+ *       type: string
+ *       required: true
+ *       description: This is password to be entered 
+ */
 app1.post('/login',AuthController.validtor,AuthController.passwordCheck, AuthController.jwtTokenGen)
 
 app1.get('/userlist', AuthController.verifyToken, userController.selectAll);
