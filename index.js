@@ -2,6 +2,9 @@
 const test = require('express');
 // console.log(test);
 var bodyParser = require('body-parser');
+
+var multer=require('multer');
+var upload = multer({ dest: 'Images/' })
 // var userModel = require('./models/UserModel.js')
 
 var swaggerJSDoc= require('swagger-jsdoc') //actual documentation
@@ -77,7 +80,19 @@ var AuthController = require('./controllers/AuthController.js')
 
 var app1 = test()
 
+
+
 app1.use(bodyParser.urlencoded({extended:true}))
+
+
+app1.post('/profile', upload.single('avatar'), function (req, res, next) {
+ 	// res.file('avatar');
+ 	res.send(req.file.originalname);
+ 	
+})
+
+
+
 app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
 
 /**
@@ -156,7 +171,7 @@ app1.get('/userselect/:id', AuthController.verifyToken, userController.selectOne
  *    tags:
  *     - DeleteUsers
  *    security:
- *     - bearerAuth: [] 
+ *     - bearerAutx`h: [] 
  *    description: Testing delete
  *    produces:
  *     - application/json
@@ -173,6 +188,12 @@ app1.get('/userselect/:id', AuthController.verifyToken, userController.selectOne
  */
 app1.delete('/users/:id',AuthController.verifyToken,userController.deleteUser)
 app1.put('/users/:id',AuthController.verifyToken, userController.updateUser)
+
+
+// app1.post('/profile', upload.single('avatar'), ImageController {
+//   // req.file is the `avatar` file
+//   // req.body will hold the text fields, if there were any
+// })
 
 
 
