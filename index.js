@@ -92,6 +92,13 @@ app1.post('/profile', upload.single('avatar'), function (req, res, next) {
 })
 
 
+app1.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
+  // req.files is array of `photos` files
+  // req.body will contain the text fields, if there were any
+  	// res.send(req.files.originalname)
+  	res.send('Success!!!!!!!!!!!')
+})
+
 
 app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
 
