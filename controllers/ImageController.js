@@ -4,6 +4,7 @@ function insertImage(req,res,next)
 {
 	image.image.create({
 			imageName:req.file.filename
+			
 	})
 	.then(function ()
 	{
@@ -18,6 +19,7 @@ function insertImage(req,res,next)
 function insertImages(req,res,next)
 {
 	var array= req.files;
+
 	array.forEach(element => {
 image.image.create({
 			imageName:element.filename

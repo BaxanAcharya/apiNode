@@ -250,3 +250,7 @@ res.send(err.message)
 
 
 app1.listen(3000);
+
+module.exports={
+	app1
+}
