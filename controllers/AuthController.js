@@ -10,7 +10,7 @@ function validtor (req,res,next){
 		res.send('username cannot be empty')
 		// next({})
 	}
-user.findOne({
+user.user.findOne({
 	where:{username:req.body.username}
 })
 .then(function(result){
@@ -38,7 +38,7 @@ bcrypt.compare(req.body.password, req.passwordFromDB)
 {
 	// console.log(result);
 	if(result===true){
-		next()
+		next();
 	}else{
 		res.send('Invalid password');
 		//next

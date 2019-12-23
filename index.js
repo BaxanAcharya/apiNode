@@ -43,6 +43,7 @@ var swaggerSepcs=swaggerJSDoc(swaggerOptions)
 var userController = require('./controllers/User_Controller.js')
 
 var AuthController = require('./controllers/AuthController.js')
+var ImageController=require('./controllers/ImageController')
 
 // console.log(db.sequelize);
 
@@ -85,19 +86,10 @@ var app1 = test()
 app1.use(bodyParser.urlencoded({extended:true}))
 
 
-app1.post('/profile', upload.single('avatar'), function (req, res, next) {
- 	// res.file('avatar');
- 	res.send(req.file.originalname);
- 	
-})
+app1.post('/profile', upload.single('avatar'), ImageController.insertImage)
 
 
-app1.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
-  // req.files is array of `photos` files
-  // req.body will contain the text fields, if there were any
-  	// res.send(req.files.originalname)
-  	res.send('Success!!!!!!!!!!!')
-})
+app1.post('/photos/upload', upload.array('photos', 3), ImageController.insertImages)
 
 
 app1.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSepcs))
@@ -258,3 +250,7 @@ res.send(err.message)
 
 
 app1.listen(3000);
+
+module.exports={
+	app1
+}
